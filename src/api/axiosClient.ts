@@ -6,7 +6,7 @@ import { setLoader } from '../features/layout/layoutSlice';
 
 // Create an instance of Axios
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:3000/api', // Replace with your API base URL
+    baseURL: 'https://ar-robotics-assign-be.vercel.app/api', // Replace with your API base URL
     timeout: 10000, // Set a timeout if needed
     headers: {
         'Content-Type': 'application/json',
