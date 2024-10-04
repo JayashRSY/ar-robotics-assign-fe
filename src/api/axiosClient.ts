@@ -54,7 +54,7 @@ axiosClient.interceptors.response.use(
         const originalRequest = error.config;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (originalRequest && error.response?.status === 401 && error.response.message === 'Unauthorized: No valid token provided' && !(originalRequest as any)._retry) {
+        if (originalRequest && error.response?.status === 401 && !(originalRequest as any)._retry) {
             if (isRefreshing) {
                 try {
                     const token = await new Promise<string>((resolve, reject) => {
