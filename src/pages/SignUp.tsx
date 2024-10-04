@@ -1,41 +1,52 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { IAuthFormProps } from "../interfaces/IAuthFormProps";
+import { IRegisterFormProps } from "../interfaces/IAuthFormProps";
 import { IRegisterResponse } from "../interfaces/IApiTypes";
 import { register } from "../api/authApi";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState<IAuthFormProps>({
+  const [form, setForm] = useState<IRegisterFormProps>({
+    name: "",
+    age: 0,
+    address: "",
     email: "",
     password: "",
+    role: "user", // Default role set to 'user'
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res: IRegisterResponse = await register(form.email, form.password);
+      const res: IRegisterResponse = await register(form);
       if (res.success) {
         toast.success(res.message);
         setForm({
+          name: "",
+          age: 0,
+          address: "",
           email: "",
           password: "",
+          role: "user", // Reset to default role
         });
         navigate("/");
       } else {
         toast.error(res.message);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message);
     }
   };
+
   return (
     <>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -53,10 +64,60 @@ const SignUp = () => {
             </p>
 
             <div>
+              <label htmlFor="name" className="sr-only">
+                Name
+              </label>
+              <div className="relative">
+                <input
+                  name="name"
+                  type="text"
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  placeholder="Enter your name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="age" className="sr-only">
+                Age
+              </label>
+              <div className="relative">
+                <input
+                  name="age"
+                  type="number"
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  placeholder="Enter your age"
+                  value={form.age}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="address" className="sr-only">
+                Address
+              </label>
+              <div className="relative">
+                <input
+                  name="address"
+                  type="text"
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  placeholder="Enter your address"
+                  value={form.address}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="email" className="sr-only">
                 Email
               </label>
-
               <div className="relative">
                 <input
                   name="email"
@@ -67,23 +128,6 @@ const SignUp = () => {
                   onChange={handleChange}
                   required
                 />
-
-                <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                    />
-                  </svg>
-                </span>
               </div>
             </div>
 
@@ -91,7 +135,6 @@ const SignUp = () => {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-
               <div className="relative">
                 <input
                   type="password"
@@ -102,30 +145,33 @@ const SignUp = () => {
                   onChange={handleChange}
                   required
                 />
-
-                <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                </span>
               </div>
+            </div>
+
+            {/* Radio buttons for role selection */}
+            <div className="flex gap-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  checked={form.role === "user"}
+                  onChange={handleChange}
+                  className="form-radio h-5 w-5 text-indigo-600"
+                />
+                <span className="ml-2">User</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="role"
+                  value="admin"
+                  checked={form.role === "admin"}
+                  onChange={handleChange}
+                  className="form-radio h-5 w-5 text-indigo-600"
+                />
+                <span className="ml-2">Admin</span>
+              </label>
             </div>
 
             <button
@@ -147,4 +193,5 @@ const SignUp = () => {
     </>
   );
 };
+
 export default SignUp;

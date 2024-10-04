@@ -2,13 +2,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import About from "./pages/About";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import AuthRoute from "./components/AuthRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "./components/Loader";
+import MyProfile from "./components/MyProfile";
+import AllUsers from "./components/AllUsers";
 
 const App = () => {
   return (
@@ -17,11 +17,13 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route element={<AuthRoute />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<MyProfile />} />
+          </Route>
+          <Route element={<AuthRoute />}>
+            <Route path="/all-users" element={<AllUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -34,6 +34,7 @@ axiosClient.interceptors.request.use(
 // Response Interceptor
 axiosClient.interceptors.response.use(
     (response) => {
+
         store.dispatch(setLoader(false));
         return response;
     },
@@ -41,7 +42,7 @@ axiosClient.interceptors.response.use(
         const originalRequest = error.config;
 
         // If the error is due to an expired token
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response.status === 401 && error.response.message === 'Unauthorized: No valid token provided' && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {

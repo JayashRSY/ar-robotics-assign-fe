@@ -6,7 +6,7 @@ export const getAllUser = async () => {
     return response.data;
 };
 
-export const deleteUser = async () => {
-    const response = await axiosClient.delete(API_ENDPOINTS.DELETE_USER);
+export const deleteUser = async (id: string) => {
+    const response = await axiosClient.post(API_ENDPOINTS.DELETE_USER, { id: id });
     return response.data;
 };

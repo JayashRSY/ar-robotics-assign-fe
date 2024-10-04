@@ -4,6 +4,7 @@ import { IUser } from '../../interfaces/IApiTypes'
 export interface authState {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user?: IUser,
+    allUsers?: IUser[]
 }
 
 const initialState: authState = {
@@ -17,11 +18,15 @@ export const userSlice = createSlice({
         setUser: (state, action: PayloadAction<any>) => {
             state.user = action.payload
         },
-       
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setAllUsers: (state, action: PayloadAction<any>) => {
+            state.allUsers = action.payload
+        },
+
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser } = userSlice.actions
+export const { setUser, setAllUsers } = userSlice.actions
 
 export default userSlice.reducer

@@ -27,3 +27,7 @@ export interface IUser {
     createdAt: string;
     updatedAt: string;
 }
+export interface ISignoutResponse {
+    success: boolean
+    message: string
+}

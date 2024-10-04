@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { IAuthFormProps } from "../interfaces/IAuthFormProps";
+import { ISigninFormProps } from "../interfaces/IAuthFormProps";
 import { ISigninResponse } from "../interfaces/IApiTypes";
 import { signin } from "../api/authApi";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import { setUser } from "../features/auth/authSlice";
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [form, setForm] = useState<IAuthFormProps>({
+  const [form, setForm] = useState<ISigninFormProps>({
     email: "",
     password: "",
   });
@@ -25,7 +25,10 @@ const SignIn = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      // eslint-disable-next-line no-debugger
       const res: ISigninResponse = await signin(form.email, form.password);
+      console.log("🚀 ~ file: SignIn.tsx:29 ~ res:", res);
+      
       if (res.success) {
         toast.success(res.message);
         dispatch(setUser(res.data));
@@ -40,7 +43,7 @@ const SignIn = () => {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.response.data.message);
     }
   };
   return (
