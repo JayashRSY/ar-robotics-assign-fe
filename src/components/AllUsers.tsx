@@ -10,30 +10,30 @@ import ProfileCard from "./ProfileCard";
 const AllUsers = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
-
   const { allUsers } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const fetchAllUser = async () => {
       try {
-        // eslint-disable-next-line no-debugger, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const res: any = await getAllUser();
         if (res.success) {
-          //   toast.success(res.message);
           dispatch(setAllUsers(res.data));
+          toast.success(res.message);
         } else {
           toast.error(res.message);
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data?.message || "Error fetching users");
       }
     };
     fetchAllUser();
   }, [dispatch]);
+
   const handleDelete = async (id: string) => {
     try {
-      // eslint-disable-next-line no-debugger, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await deleteUser(id);
       if (res.success) {
         dispatch(setAllUsers(allUsers?.filter((user) => user._id !== id)));
@@ -43,16 +43,17 @@ const AllUsers = () => {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      toast.error(err.response?.data?.message || "Error deleting user");
     }
   };
+
   return (
     <>
       <div className="font-bold text-xl mb-2 text-center">All Users</div>
       {user?.role === "admin" ? (
         <div className="flex flex-wrap mx-6">
           {allUsers?.map((user) => (
-            <div className="m-6">
+            <div className="m-6" key={user._id}>
               <ProfileCard data={user} />
               <button
                 onClick={() => handleDelete(user._id)}
@@ -66,9 +67,12 @@ const AllUsers = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center mt-6 text-gray-500">Only Admins can view all users</div>
+        <div className="text-center mt-6 text-gray-500">
+          Only Admins can view all users
+        </div>
       )}
     </>
   );
 };
+
 export default AllUsers;
