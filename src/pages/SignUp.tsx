@@ -25,6 +25,13 @@ const SignUp = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Age validation
+    if (form.age <= 0) {
+      toast.error("Age must be greater than 0");
+      return;
+    }
+
     try {
       const res: IRegisterResponse = await register(form);
       if (res.success) {
@@ -41,7 +48,7 @@ const SignUp = () => {
       } else {
         toast.error(res.message);
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message);
     }
